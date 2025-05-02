@@ -16,6 +16,61 @@
   Once you've implemented the logic, test your code by running
 */
 
-class Calculator {}
+class Calculator {
+  constructor(){
+    this.result = 0;
+  }
+  add(num){
+    this.result += num;
+    return this; // we are returning "this" so we can use chaining for eg: calc.add(5).sub(2).mul(3).getResult();
+  }
+  subtract(num){
+    this.result -= num;
+    return this;
+  }
+  multiply(num){
+    this.result *= num;
+    return this;
+  }
+  divide(num){
+    if(num === 0){
+      throw new Error("Cannot divide by 0.")
+    }else{
+      this.result /= num;
+    }
+    return this;
+  }
+  clear(){
+    this.result = 0;
+    return this;
+  }
+  getResult(){
+    return this.result;
+  }
+  calculate(str){
+    this.result = 0;
+    str = str.replace(/\s+/g, ''); // clear all the unnecessary whilespaces.
+    // it a basic filter for conforming that we have numbers only. 
+    for (let char of str) {
+      if (!'0123456789+-*/().'.includes(char)) {
+        throw new Error(`Invalid character found: ${char}`);
+      }
+    }
+    // Safely evaluate the expression
+    let res;
+    try {
+      res = new Function(`return (${str})`)();
+    } catch (err) {
+      throw new Error('Invalid expression');
+    }
+
+    // Check result is a finite number
+    if (typeof res !== 'number' || !isFinite(res)) {
+      throw new Error('Expression did not evaluate to a valid number');
+    }
+    this.result = res;
+    return this.result;
+  }
+}
 
 module.exports = Calculator;
