@@ -68,6 +68,7 @@ It is a wrapper on top of another async function,
 which is fine
 Usually all the async func we will write will be on top of JS provided async functions like: setTimeout or fs.readFile.
 */
+/* // Normal async func.
 const fs = require('fs');
 
 function readMyFile(callback){ // own async func
@@ -78,5 +79,38 @@ function readMyFile(callback){ // own async func
 function oneDone(data){ // callback function to call
     console.log(data);
 }
-
 readMyFile(oneDone);
+*/
+/*
+// promise async func
+const fs = require('fs');
+
+function readMyFile(){ // own async func
+    return new Promise(function(resolve){
+        fs.readFile('Vid-1.5-test.txt', 'utf-8', function(err, data){
+            resolve(data);
+    });
+    });
+}
+function onDone(data){ // callback function to call
+    console.log(data);
+}
+readMyFile().then(onDone);
+// promise can have 3 states: pending, resolved and rejected
+*/
+
+// Async await
+function myfunc(){
+    let p = new Promise(function(resolve){
+        setTimeout(function(){
+            resolve("HI");
+        }, 10000)
+    })
+    return p;
+}
+async function main() {
+    let value = await myfunc();
+    console.log(value);
+}
+main();
+// Week-1 Completed.....

@@ -66,3 +66,10 @@ Thus, The net time taken can be decreased by this.
 
 ### Promises
 - Promises are the syntectical sugar that makes the async code slightly more readable.
+
+### Async await
+- await is only valid and allowed in a async function
+- This also do the same thing as promises but it is more readable or sugar coat it.
+- await is performed at the callback side thus making it more readable.
+
+#### Week-1 Done 🫡
