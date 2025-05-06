@@ -111,5 +111,89 @@ console.log(TotalSalary([bingo, mad]));
 
 
 
-// Async, Promises, async/await
+// callback, Async, Promises, async/await -->> sequencial revision
+// 1. Callbacks
+function sqrNum(n){
+    return n * n;
+}
+function cubeNum(n){
+    return n*n*n;
+}
+function sumGame(a,b,fn){
+    let action1 = fn(a);
+    let action2 = fn(b);
+    return action1 + action2;
+}
+/*
+let ans = sumGame(2,5,cubeNum);
+console.log(ans);
+*/
+// ---------------------------------------------------------------
+// 2. Async funcs
+/*
+const fs = require('fs');
+function ondone(){
+    console.log("hi there!!")
+}
+setTimeout(ondone, 1000);
+console.log("After settimeout..");
+fs.readFile("demofile.txt", fn => {
+    ondone();
+    console.log("yo..");
+});
+for(let i = 0; i<10000000; i++){
+    i++;
+}
+console.log("after readfile and loop..");
+*/
+
+// 3. Promises
+const fs = require("fs");
+
+fs.readFile("demofile.txt", "utf-8", function (err, data){
+    data = data + " yo yo...";
+    console.log(data);
+})
+
+// ways to write your own async function
+// 1. wrapping another async func.
+/*
+function mysettime(fn, duration){
+    setTimeout(fn, duration);
+}
+mysettime(function(){ // returns undefinned
+    console.log("logging first thing.")
+    mysettime(function(){
+        console.log("Logging second thing.")
+    }, 2000)
+}, 1000);
+ 
+This method uses a callback, here we have created a function where other people can send a callback that's good, but it could lead to " Callback Hell".
+So, callbacks leads to unnecessary indentation that is called callback hell.
+*/
+// 2. Using Promises now
+function mysettime(duration){
+    let p = new Promise(function(resolve){
+        setTimeout(function (){
+            resolve();
+        }, duration);
+    });
+    return p;
+}
+const ans = mysettime(1000)
+ans.then(function(){
+    console.log("Log the 1st thing.");
+});
+
+
+
+
+
+
+
+
+
+
+
+
 
