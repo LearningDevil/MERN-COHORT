@@ -38,12 +38,178 @@
     - For any other route not defined in the server return 404
 
   Testing the server - run `npm run test-todoServer` command in terminal
- */
-  const express = require('express');
-  const bodyParser = require('body-parser');
-  
-  const app = express();
-  
-  app.use(bodyParser.json());
-  
-  module.exports = app;
+*/
+
+/* 
+// in-memory database
+let todos = []
+
+const express = require('express');
+const bodyParser = require('body-parser');
+
+const app = express();
+
+app.use(bodyParser.json());
+ 
+app.get('/todo', (req, res) => {
+  res.json(todos)
+})
+
+app.get('/todo/:id', (req, res) => {
+  const todo = todos.find(i => i.unqid === parseInt(req.params.id));
+  if(!todo){
+    res.status(404).send();
+  }else{
+    res.json(todo);
+  }
+})
+app.post('/todo', (req, res) => {
+  const newTodo = {
+    unqid : Math.floor(Math.random() * 10000),
+    title : req.body.title,
+    description : req.body.description
+  }
+  todos.push(newTodo);
+  res.status(201).json(newTodo);
+})
+
+app.put('/todo/:id', (req, res) => {
+  const todoIndex = todos.findIndex(i => i.unqid === parseInt(req.params.id));
+  if(todoIndex === -1){
+    res.status(404).send();
+  }else{
+    todos[todoIndex].title = req.body.title;
+    todos[todoIndex].description = req.body.description;
+    res.json(todos[todoIndex])
+  }
+
+})
+
+app.delete('/todo/:id', (req, res) => {
+  const todoIndex = todos.findIndex(i => i.unqid === parseInt(req.params.id));
+  if(todoIndex === -1){
+    res.status(404).send();
+  }else{
+    todos.splice(todoIndex, 1);
+    res.status(200).send();
+  }
+
+})
+
+app.use((req, res, next) => {
+    res.status(404).json({ message: "Route not found" });
+});
+*/
+const fs = require("fs");
+const express = require('express');
+const bodyParser = require('body-parser');
+
+const app = express();
+
+app.use(bodyParser.json());
+
+
+const filePath = "todos.json";
+if (!fs.existsSync(filePath)) {
+  fs.writeFileSync(filePath, "[]");
+}
+function removeAtIndex(arr, index) {
+  let newArray = [];
+  for (let i = 0; i < arr.length; i++) {
+    if (i !== index) newArray.push(arr[i]);
+  }
+  return newArray;
+}
+
+app.get('/todos', (req, res) => {
+  fs.readFile("todos.json", "utf-8", (err, data) => {
+    if(err) throw err;
+    const todos = JSON.parse(data);
+    res.json(todos);
+  });
+});
+
+app.get('/todos/:id', (req, res) => {
+  fs.readFile("todos.json", "utf-8", (err, data) => {
+    if (err){
+      return res.status(500).json({error: "Unable to read the file."})
+    }
+    const todos = JSON.parse(data);
+    const todo = todos.find(i => i.id === parseInt(req.params.id));
+    if(!todo){
+      res.status(404).send();
+    }else{
+      res.json(todo);
+    }
+  });
+});
+
+app.post('/todos', (req, res) => {
+  const newTodo = {
+    id : Math.floor(Math.random() * 10000),
+    title : req.body.title,
+    description : req.body.description
+  };
+  fs.readFile("todos.json", "utf-8", (err, data) => {
+    if (err){
+      return res.status(500).json({error: "Unable to add into the file."})
+    }
+    const todos = JSON.parse(data);
+    todos.push(newTodo);
+    fs.writeFile("todos.json", JSON.stringify(todos), (err, data)=>{
+      if (err){
+      return res.status(500).json({error: "Unable to write into the file."})
+      }
+      res.status(201).json(newTodo);
+    });
+  });
+});
+
+app.put('/todos/:id', (req, res) => {
+  fs.readFile("todos.json", "utf-8", (err, data)=>{
+    if(err){
+      res.status(500).json({error: "There is an error in put."});
+    }
+    const todos = JSON.parse(data);
+    const todoIndex = todos.findIndex(i => i.id === parseInt(req.params.id));
+    if(todoIndex === -1){
+      res.status(404).send();
+    }else{
+      const updatedTodo = {
+        id: todos[todoIndex].id,
+        title: req.body.title,
+        description: req.body.description
+      };
+      todos[todoIndex] = updatedTodo;
+      fs.writeFile("todos.json", JSON.stringify(todos), (err) => {
+        if (err) throw err;
+        res.status(200).json(updatedTodo);
+      });
+    }
+  });
+});
+
+app.delete('/todos/:id', (req, res) => {
+  fs.readFile("todos.json", "utf-8", (err, data) => {
+    if(err){
+      return res.status(500).json({error: "Unable to delete.."});
+    }
+    let todos = JSON.parse(data);
+    const todoIndex = todos.findIndex(i => i.id === parseInt(req.params.id));
+    if(todoIndex === -1){
+      res.status(404).send();
+    }else{
+      todos = removeAtIndex(todos, todoIndex);
+        fs.writeFile("todos.json", JSON.stringify(todos), (err) => {
+          if (err) throw err;
+          res.status(200).send();
+      });
+    }
+  });
+});
+
+app.use((req, res, next) => {
+    res.status(404).json({ message: "Route not found" });
+});
+ 
+module.exports = app;

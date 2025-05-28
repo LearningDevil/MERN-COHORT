@@ -185,15 +185,3 @@ ans.then(function(){
     console.log("Log the 1st thing.");
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
