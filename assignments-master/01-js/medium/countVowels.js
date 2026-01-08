@@ -4,18 +4,24 @@
 
   Once you've implemented the logic, test your code by running
 */
-function isVowel(char) {
-  return 'aeiouAEIOU'.includes(char);
-}
+// function isVowel(char) {
+//   return 'aeiouAEIOU'.includes(char);
+// }
+// function countVowels(str) {
+//     // Your code here
+//     let count = 0;
+//     for(let i=0; i<str.length;i++){
+//       if(isVowel(str[i])){
+//         count+=1;
+//       }
+//     }
+//     return count;
+// }
+
 function countVowels(str) {
     // Your code here
-    let count = 0;
-    for(let i=0; i<str.length;i++){
-      if(isVowel(str[i])){
-        count+=1;
-      }
-    }
-    return count;
+    let vowels = "aeiouAEIOU"
+    return str.split("").filter(ch => vowels.includes(ch)).length
 }
 
 module.exports = countVowels;

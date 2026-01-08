@@ -70,9 +70,23 @@ need to understand 4 lvls.
 *These are **standard** practices, we don't need all of it, but it is what mentioned in the specs and hence is a good prsctice to follow.*
 
 ->> **Postman Implementation**
+**body-parser:** 
+body-parser module enables us to parse incoming request bodies in a middleware. As Express.js server needs to know what type of data being sent over the network, so it knows how to parse it.
 
 ## 2.3 Bash Commands
-Used WSL in case of windows
+Basic Ones: 
+* pwd -> print directory
+* cd -> change directory
+* ls -> listing all the file in current folder.
+* mkdir -> make directory
+* touch -> let's you create an empty file
+* cat -> print the content of the file
+* vi/vim -> let's you edit a file
+* mv -> move
+* cp -> copy
+* nvm -> node version manager
+* npm -> node package manager
+* node
 
 ## 2.4 Advanced Bash Commands
 
@@ -98,3 +112,39 @@ Example:
                     It's a shorter way of writting functions. there are some more things to it that will be explained later.
 
 ## 2.7 Git/Github
+**Basic workflow of git.**
+* working directory **----> git add** staging area **----> git commit** repository
+
+* Blobs: Binary Large Object
+* Tree
+
+Comman Commands:
+
+**clone**: bring a repository locally.
+**add**: track your files and changes in Git.
+**Commit -m**: Save your files in git, '-m' is to provide message/description.
+**Push**: upload your commits to a git repo
+**Pull**: download changes from a remote repo. locally.
+**checkout -b**: create new branch and '-b' is to specify name of that branch.
+
+
+### Scenerio: Uploading an existing project from local machine to github.
+
+1. *git init*: creates a github repo within the folder or address.
+        **Assume that you haven't setup the account in which you are going to perform saves. So, how to set your account.**
+        -> *git config --global user.name "gitHubUserName"*
+        -> *git config --global user.email "emailaddress"*
+2. *git status*: status of current directory
+3. *git add .*: stage all the changes, '.' referes to all the files, if we want we can use specific file name, if we need to commit some specific file only.
+        *Note* -> use "git rm --cached <file>..." to unstage any specific file.
+4. *git commit -m*: to save the changes into our local repo.
+**In normal cases we could have used git push but as this is the first time we have created the repo, there is no remote link availble for it to push on, so we need to first check that there is any remote link or not then we will create a link if not available.**
+5. *git remote -v*: if nothing appears then no remote configuration has been setup yet.
+6. *git remote add origin .https://github.com/UserName/**RepoName**.git*: here link is of the empty repo that will hold our data.
+        Now, if do "git remote -v" then we will see from where we fetch and where we puch data.
+7. *git push*: **Here we will get a fatal warning, saying "no upstream branch"**
+So, to solve it,
+        1. git push --set-upstream origin master
+                        **OR**
+        2. git push origin master (recommended/easy)
+
