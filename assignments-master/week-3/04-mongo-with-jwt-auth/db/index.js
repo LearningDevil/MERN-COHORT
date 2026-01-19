@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://deepSleep:Devil.208@cluster0.fwnpy9a.mongodb.net/DBwithJWT');
+mongoose.connect('URL/DBwithJWT');
 
 // Define schemas
 const AdminSchema = new mongoose.Schema({
